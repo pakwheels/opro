@@ -18,6 +18,8 @@ when /pre/
   {github: "plataformatec/devise", branch: "rails4"}
 when "3.1.0", "3.2.0", "default"
   "~> 2.2"
+else
+  "~> 4.7"
 end
 
 gem "rails", rails
@@ -29,13 +31,13 @@ gem 'jbuilder'
 group :development, :test do
   gem 'mocha', :require => false
   gem 'timecop'
-  gem 'jeweler',  "~> 1.6.4"
+  gem 'jeweler',  "~> 2.3"
 
   gem "capybara", ">= 0.4.0"
 
   gem "launchy"
 
-  gem "sqlite3",                          :platform => [:ruby, :mswin, :mingw]
+  gem "sqlite3", "~> 1.6.0",             :platform => [:ruby, :mswin, :mingw]
 
   gem "activerecord-jdbcsqlite3-adapter", '>= 1.3.0.beta', :platform => :jruby
   gem "jdbc-sqlite3",                     :platform => :jruby

@@ -2,8 +2,8 @@ class Opro::Oauth::ClientApp < ActiveRecord::Base
   self.table_name = :opro_client_apps
 
   belongs_to :user
-  validates  :app_id, :uniqueness => true
-  validates  :name,   :uniqueness => true
+  validates  :app_id, :uniqueness => { case_sensitive: true }
+  validates  :name,   :uniqueness => { case_sensitive: true }
 
   alias_attribute :client_id, :app_id
 

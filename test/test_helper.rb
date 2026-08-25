@@ -6,14 +6,14 @@ begin
     require 'simplecov'
     SimpleCov.start 'rails'
   end
-rescue LoadError => e
+rescue LoadError
 end
 
 ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
 
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'timecop'
 require 'database_cleaner'
 DatabaseCleaner.strategy = :truncation
@@ -36,19 +36,19 @@ ActiveRecord::Migration.verbose = false
 ActiveRecord::Base.logger = Logger.new(nil)
 
 
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
+ActiveRecord::MigrationContext.new(
+  [File.expand_path("../dummy/db/migrate/", __FILE__)],
+  ActiveRecord::SchemaMigration
+).migrate
 
 class ActiveSupport::TestCase
-  self.use_transactional_fixtures = true
-  self.use_instantiated_fixtures  = false
+  self.use_transactional_tests = true
 end
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 
-
-include Devise::TestHelpers
 
 # gives us the login_as(@user) method when request object is not present
 include Warden::Test::Helpers
@@ -96,7 +96,7 @@ alias :create_auth_grant :create_auth_grant_for_user
 # Will run the given code as the user passed in
 def as_user(user=nil, &block)
   current_user = user || create_user
-  if self.respond_to? :request
+  if respond_to?(:sign_in)
     sign_in(current_user)
   else
     login_as(current_user, :scope => :user)
@@ -108,7 +108,7 @@ end
 
 def as_visitor(user=nil, &block)
   current_user = user || create_user
-  if self.respond_to? :request
+  if respond_to?(:sign_out)
     sign_out(current_user)
   else
     logout(:user)
@@ -116,4 +116,3 @@ def as_visitor(user=nil, &block)
   block.call if block.present?
   return self
 end
-

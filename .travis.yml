@@ -1,18 +1,13 @@
 language: ruby
 
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - jruby-19mode
-  - ruby-head
+  - 2.7.8
 
 env:
-  - "RAILS_VERSION=3.2.0"
-  - "RAILS_VERSION=3.1.0"
-  - "RAILS_VERSION=4.0.0.pre"
-  - "RAILS_VERSION=master"
+  - "RAILS_VERSION=6.0.6.1"
 
-matrix:
-  allow_failures:
-    - rvm: ruby-head
-    - env: "RAILS_VERSION=master"
+before_install:
+  - gem install bundler -v 2.4.22
+
+script:
+  - bundle _2.4.22_ exec rake test

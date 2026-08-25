@@ -37,7 +37,7 @@ class Opro::Oauth::AuthController < OproController
       @redirect_uri ||= params[:redirect_uri]
       @client_app   ||= Opro::Oauth::ClientApp.find_by_app_id(params[:client_id])
       params.delete("action").delete("controller")
-      redirect_to oauth_new_path(params)
+      redirect_to oauth_new_path(params.to_unsafe_h)
     end
   end
 
